@@ -1,6 +1,7 @@
 import os, sys
 import datetime
 import csv
+import time
 
 sys.path.append(os.path.join("/home/pi/.local/lib/python2.7/site-packages"))
 
@@ -26,8 +27,8 @@ class Sensor(object):
 
     def __init__(self):
 
+        self.errmsg = YRefParam()
         errmsg = YRefParam()
-
         if len(sys.argv) < 2:
             usage()
         target = sys.argv[1]
@@ -44,6 +45,7 @@ class Sensor(object):
                 die('No module connected (check USB cable)')
 
             m = anytilt.get_module()
+            self.module = m
             target = m.get_serialNumber()
 
         else:
@@ -67,10 +69,37 @@ class Sensor(object):
         #Erase data logger contents from previous run
         datalogger = YDataLogger.FirstDataLogger()
         datalogger.forgetAllDataStreams()
+    def calibrate(self):
+        self.errmsg = YRefParam()
 
+        #Flash yocto light for calibration
+        self.module.set_luminosity(0)
+        time.sleep(0.25)
+        self.module.set_luminosity(100)
+        time.sleep(0.25)
+        self.module.set_luminosity(0)
+        time.sleep(0.25)
+        self.module.set_luminosity(100)
+        time.sleep(0.25)
+
+        sensors = self.sensors
+        tilt1 = sensors[0]
+        tilt2 = sensors[1]
+        compass = sensors[2]
+        accelerometer = sensors[3]
+
+        self.tilt1_cal = tilt1.get_currentValue()
+        self.tilt2_cal = tilt2.get_currentValue()
+        self.compass_cal = compass.get_currentValue()
+        self.accelerometer_cal = accelerometer.get_currentValue()
+
+        
     def run(self):
 
         self.errmsg = YRefParam()
+
+        #Change yocto light to 0 to indicate the start of recording
+        self.module.set_luminosity(0)
         
         count = 0
         sensors = self.sensors
@@ -92,6 +121,9 @@ class Sensor(object):
             
     def stop(self):
         accelerometer = self.sensors[3]
+
+        #Resume Yoctopuce light
+        self.module.set_luminosity(50)
 
         #stop call stops dataLogger
         accelerometer.stopDataLogger()
@@ -127,17 +159,20 @@ class Sensor(object):
 
                 #Output file   
                 writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(['start','end','avg'])
+                writer.writerow(['starttime','value'])
                 for row in lst:
                     writer.writerow(row)
 
+                #Save calibrated values
+
             cnt += 1
+
+        print("End Datalogger extraction")
             
         YAPI.FreeAPI()
 
 def main():
     import time
-    
     x = Sensor()
     x.erase()
     x.run()
