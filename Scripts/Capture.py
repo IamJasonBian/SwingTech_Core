@@ -9,6 +9,7 @@ from yoctopuce.yocto_api import *
 from yoctopuce.yocto_tilt import *
 from yoctopuce.yocto_compass import *
 from yoctopuce.yocto_accelerometer import *
+from yoctopuce.yocto_gyro import *
 
 
 def usage():
@@ -60,9 +61,22 @@ class Sensor(object):
         tilt2 = YTilt.FindTilt(serial + ".tilt2")
         compass = YCompass.FindCompass(serial + ".compass")
         accelerometer = YAccelerometer.FindAccelerometer(serial + ".accelerometer")
+
+        #acceleration x,y, and z components (units mg)
+        qt1 = YQt.FindQt(serial + ".qt1")
+        qt1.set_logicalName("ax")
+
+        qt2 = YQt.FindQt(serial + ".qt2")
+        qt2.set_logicalName("ay")
+
+
+        qt3 = YQt.FindQt(serial + ".qt3")
+        qt3.set_logicalName("az")
+
+
         self.start = datetime.datetime.now()
-        self.sensors = [tilt1,tilt2,compass, accelerometer]
-        self.names = ['tilt1','tilt2','compass', 'accelerometer']
+        self.sensors = [tilt1,tilt2,compass, accelerometer, qt1, qt2, qt3]
+        self.names = ['starttime','tilt1','tilt2','compass', 'accelerometer', 'ax', 'ay', 'az']
 
     
     def erase(self):
@@ -89,7 +103,8 @@ class Sensor(object):
 
         with open('Calibration.csv', mode='w') as file:
 
-            #Output file   
+            #Output file   
+
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(['starttime','tilt1', 'tilt2','compass','accelerometer'])
             writer.writerow([caltime, tilt1_cal, tilt2_cal, compass_cal, accelerometer_cal])
@@ -118,10 +133,8 @@ class Sensor(object):
         sensors = self.sensors
         names = self.names
 
-        tilt1 = sensors[0]
-        tilt2 = sensors[1]
-        compass = sensors[2]
         accelerometer = sensors[3]
+
         start = datetime.datetime.now()
 
         if not (accelerometer.isOnline()):
@@ -142,8 +155,19 @@ class Sensor(object):
 
     def extract(self):
         sensors = self.sensors
-        names = ['tilt1','tilt2','compass', 'accelerometer']
-        #Extracting using datalogger
+        names = self.names
+        #Extracting using datalogger
+
+        #Flash yocto light for extraction
+        self.module.set_luminosity(0)
+        time.sleep(0.25)
+        self.module.set_luminosity(100)
+        time.sleep(0.25)
+        self.module.set_luminosity(0)
+        time.sleep(0.25)
+        self.module.set_luminosity(100)
+        time.sleep(0.25)
+
         print("Begin Datalogger extraction")
         cnt = 0
         long_lst = []
@@ -153,13 +177,15 @@ class Sensor(object):
             name = names[cnt]
             dataset = i.get_recordedData(0,0)
             dataset.loadMore()
-            progress = 0
+            progress = 0
+
             while progress < 100:
                 progress = dataset.loadMore()
             details = dataset.get_measures()
             
             fmt = 'hh:mm:ss,fff'
-            lst = []
+            lst = []
+
             for m in details:
                 if cnt == 0:
                     long_lst.append([str(m.get_startTimeUTC_asDatetime()), m.get_averageValue()])
@@ -171,9 +197,10 @@ class Sensor(object):
         
         with open(str(self.start)+'.csv', mode='w') as file:
 
-                #Output file   
+                #Output file   
+
                 writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(['starttime','tilt1', 'tilt2','compass','accelerometer'])     
+                writer.writerow(self.names)     
                 for row in long_lst:
                     writer.writerow(row)
 
@@ -184,15 +211,7 @@ class Sensor(object):
 
 
 
-        #Flash yocto light for calibration
-        self.module.set_luminosity(0)
-        time.sleep(0.25)
-        self.module.set_luminosity(100)
-        time.sleep(0.25)
-        self.module.set_luminosity(0)
-        time.sleep(0.25)
-        self.module.set_luminosity(100)
-        time.sleep(0.25)
+
 
         #Resume Yoctopuce light
         self.module.set_luminosity(50)
