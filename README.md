@@ -9,6 +9,9 @@ Figure 1: SwingTech Captured Swings
 
 
 Figure 2: SwingTech Swings Deep-Dive
+
+Here, we can see the orientation time-series, the acceleration time-series, and the displacement time-series projected and within the xyz plane.
+
 ![image](https://user-images.githubusercontent.com/16582383/119071697-249ade80-b99f-11eb-85eb-0f288cf21918.png)
 
 
