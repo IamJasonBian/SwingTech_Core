@@ -10,4 +10,5 @@ Figure 1: SwingTech Captured Swings
 
 
 Figure 2: SwingTech Swings Deep-Dive
-![image](https://user-images.githubusercontent.com/16582383/119071477-be15c080-b99e-11eb-8843-fe5b3d09d44d.png)
+![SwingTech Deepdive](https://user-images.githubusercontent.com/16582383/119071536-d84f9e80-b99e-11eb-811b-e096cfcf869d.png)
+
