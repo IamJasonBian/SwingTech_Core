@@ -8,7 +8,9 @@ Figure 1: SwingTech Captured Swings
 ![image](https://user-images.githubusercontent.com/16582383/119071386-8f97e580-b99e-11eb-9217-fe57bb822b4e.png)
 
 
-
 Figure 2: SwingTech Swings Deep-Dive
-![SwingTech Deepdive](https://user-images.githubusercontent.com/16582383/119071536-d84f9e80-b99e-11eb-811b-e096cfcf869d.png)
+
+![image](https://user-images.githubusercontent.com/16582383/119071597-f4ebd680-b99e-11eb-911c-170cefbc82d5.png)
+
+
 
