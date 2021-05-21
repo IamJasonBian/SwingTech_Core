@@ -14,7 +14,19 @@ Here, we can see the orientation time-series, the acceleration time-series, and 
 
 ![image](https://user-images.githubusercontent.com/16582383/119071697-249ade80-b99f-11eb-85eb-0f288cf21918.png)
 
-### 
+### Building the Device:
+
+At the bare minimum, the following set of items is needed to assemble the device:
+  1. pi zero
+  2. sd card
+  3. yoctopuce sensor
+  4. micro usb connection
+  5. pi zero power supply
+
+We 3d printed an enclosure for this device and its specs can be found in this whitepaper: https://swingtechio.files.wordpress.com/2020/02/project-doc.pdf
+
+Additionally, you can request beta devices here: 
+https://docs.google.com/forms/d/e/1FAIpQLSdCNZfaUu4nQ0SYeTc7iaQ_SiNzVzpYLAXgBIuaWSeN1zN-_g/viewform
 
 ### Using the Beta Build 
 To use the beta build, fork the pi-test into your raspberry pi and download the pi-build repo into your pi. Within pi-build there are two possible scripts you can use via init scripts within the pi:
