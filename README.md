@@ -14,6 +14,14 @@ Here, we can see the orientation time-series, the acceleration time-series, and 
 
 ![image](https://user-images.githubusercontent.com/16582383/119071697-249ade80-b99f-11eb-85eb-0f288cf21918.png)
 
+### 
 
+### Using the Beta Build 
+To use the beta build, fork the pi-test into your raspberry pi and download the pi-build repo into your pi. Within pi-build there are two possible scripts you can use via init scripts within the pi:
+
+  1. anydot.py: The build will auto record once the pi is live
+  2. mydot.py: The build will record according to commands from bluedot: https://bluedot.readthedocs.io/en/latest/
+
+To run the App, fork the Desktop App contents into your Desktop. If you wish to view the contents of the pi, plug it via usb into your computer and use the Usb_Copy.py code to locally save pi data into your computer. Make sure the move the contents of the usb transfer into the Assets folder as Data.csv.
 
 
