@@ -22,6 +22,6 @@ To use the beta build, fork the pi-test into your raspberry pi and download the 
   1. anydot.py: The build will auto record once the pi is live
   2. mydot.py: The build will record according to commands from bluedot: https://bluedot.readthedocs.io/en/latest/
 
-To run the App, fork the Desktop App contents into your Desktop. If you wish to view the contents of the pi, plug it via usb into your computer and use the Usb_Copy.py code to locally save pi data into your computer. Make sure the move the contents of the usb transfer into the Assets folder as Data.csv.
+To run the App, fork the Desktop App contents into your Desktop. If you wish to view the contents of the pi, plug it via usb into your computer and use the Usb_Copy.py code to locally save pi data into your computer. Make sure to move the contents of the usb transfer into the Assets folder as Data.csv.
 
 
